@@ -100,16 +100,14 @@
     --sprite-r: round(up, calc(var(--sprite-f) / var(--sprite-c)), 1);
     /* frame height */
     --sprite-sh: calc(var(--sprite-h) / var(--sprite-r));
-    /* frame target height, width - increased for full screen */
-    --sprite-th: calc(var(--sprite-sh) / 1.5);
+    /* frame target height, width - scaled for full screen */
+    --sprite-th: 100vh;
+    --sprite-tw: 100vw;
 
     /* aspect ratio */
     --sprite-ar: calc(var(--sprite-th) / var(--sprite-sh));
     --sprite-uh: calc(var(--sprite-h) * var(--sprite-ar));
     --sprite-uw: calc(var(--sprite-w) * var(--sprite-ar));
-
-    /* frame width */
-    --sprite-tw: calc(var(--sprite-uw) / var(--sprite-c));
 
     > h1 {
       color: #d2d4e1;
@@ -134,17 +132,19 @@
       height: 100%;
 
       .sprite {
-        position: absolute;
+        position: fixed;
+        top: 0;
+        left: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: calc(1px * var(--sprite-th));
-        width: calc(1px * var(--sprite-tw));
-        margin: calc(-1px * calc((var(--sprite-th) - (var(--sprite-th) * 0.6107)) / 2)) calc(-1px * calc((var(--sprite-tw) - (var(--sprite-tw) * 0.7042)) / 2));
+        height: 100vh;
+        width: 100vw;
         background-image: var(--sprite-image);
         transform-origin: center center;
         background-repeat: no-repeat;
-        background-size: calc(1px * var(--sprite-uw)) calc(1px * var(--sprite-uh));
+        background-size: cover;
+        background-position: center;
         z-index: -1;
 
         /* Frame end position */
@@ -271,11 +271,13 @@
 
           .page-container {
             display: flex;
-            gap: 2rem;
+            gap: 4rem;
             height: 100vh;
             width: 100vw;
-            padding: 2rem;
+            padding: 4rem;
             box-sizing: border-box;
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(2px);
 
             animation: stay-centered linear both;
             animation-timeline: view(x);
@@ -284,34 +286,40 @@
 
           .left-page, .right-page {
             flex: 1;
-            font-size: medium;
+            font-size: large;
             overflow: auto;
             display: grid;
             grid-template-rows: 1fr auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
 
             &:after {
-              bottom: 15px;
+              bottom: 20px;
               color: hsl(45.71deg 69.23% 30%);
+              font-size: 1rem;
             }
 
             > div {
               text-align: justify;
               hyphens: auto;
-              line-height: normal;
+              line-height: 1.6;
               display: block;
               word-wrap: break-word;
+              color: #333;
             }
           }
 
           .left-page {
-            padding: 20px 0 20px 20px;
+            padding: 3rem 2rem 3rem 3rem;
             &:after {
               content: counter(curpage);
             }
           }
 
           .right-page {
-            padding: 20px 20px 20px 0;
+            padding: 3rem 3rem 3rem 2rem;
             counter-increment: curpage;
             &:after {
               content: counter(curpage);
@@ -326,36 +334,59 @@
 
 @media (width < 1200px) {
   .container {
-    --sprite-th: calc(var(--sprite-sh) / 1.8);
-
     > h1 {
       font-size: 1.5rem;
       top: 15px;
     }
 
     .page-container {
-      padding: 1.5rem;
-      gap: 1.5rem;
+      padding: 3rem;
+      gap: 3rem;
     }
 
     .left-page, .right-page {
-      font-size: small;
+      font-size: medium;
+      
+      > div {
+        font-size: 1rem;
+      }
     }
   }
 }
 
 @media (width < 768px) {
   .container {
-    --sprite-th: calc(var(--sprite-sh) / 2.2);
-
     > h1 {
       font-size: 1.25rem;
       top: 10px;
     }
 
     .page-container {
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .left-page, .right-page {
+      font-size: small;
+      
+      > div {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (width < 480px) {
+  .container {
+    > h1 {
+      font-size: 1rem;
+      top: 5px;
+    }
+
+    .page-container {
       padding: 1rem;
       gap: 1rem;
+      flex-direction: column;
     }
 
     .left-page, .right-page {
@@ -364,34 +395,9 @@
       > div {
         font-size: 0.8rem;
       }
-    }
-  }
-}
-
-@media (width < 480px) {
-  .container {
-    --sprite-th: calc(var(--sprite-sh) / 3);
-
-    > h1 {
-      font-size: 1rem;
-      top: 5px;
-    }
-
-    .page-container {
-      padding: 0.5rem;
-      gap: 0.5rem;
-      flex-direction: column;
-    }
-
-    .left-page, .right-page {
-      font-size: x-small;
-      
-      > div {
-        font-size: 0.6rem;
-      }
 
       &:after {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
       }
     }
   }
